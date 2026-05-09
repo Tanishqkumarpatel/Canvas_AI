@@ -1,0 +1,44 @@
+[
+  {
+    "id": "1",
+    "name": "Introduction to Computer Science",
+    "course_code": "CS101",
+    "term": "Spring 2026",
+    "enrollment_status": "active"
+  },
+  {
+    "id": "2",
+    "name": "Calculus II",
+    "course_code": "MATH200",
+    "term": "Spring 2026",
+    "enrollment_status": "active"
+  },
+  {
+    "id": "3",
+    "name": "Academic Writing",
+    "course_code": "ENGL100",
+    "term": "Spring 2026",
+    "enrollment_status": "active"
+  },
+  {
+    "id": "4",
+    "name": "Introduction to Psychology",
+    "course_code": "PSYC101",
+    "term": "Spring 2026",
+    "enrollment_status": "active"
+  },
+  {
+    "id": "5",
+    "name": "Data Structures and Algorithms",
+    "course_code": "CS201",
+    "term": "Spring 2026",
+    "enrollment_status": "active"
+  },
+  {
+    "id": "6",
+    "name": "Linear Algebra",
+    "course_code": "MATH221",
+    "term": "Fall 2025",
+    "enrollment_status": "completed"
+  }
+]
