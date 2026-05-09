@@ -1,11 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import Link from 'next/link'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const { data } = useSession()
 
   return (
     <>
@@ -34,7 +35,7 @@ export default function Navbar() {
       )}
 
       <div className={`fixed top-0 left-0 h-full w-64 bg-gray-900 text-white z-20 flex flex-col p-4 gap-2 shadow-xl transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-
+              
         <Link
             href='/dashboard'
             onClick={() => setIsOpen(false)}
