@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Canvas AI 🎓 (In Progress)
+
+An AI-powered study companion that connects to your Canvas LMS to help you learn smarter — not harder.
+
+## What It Does
+
+Canvas AI pulls your courses directly from Canvas and turns your lecture materials into an active learning experience:
+
+- 📝 **Lecture Summaries** — Get concise summaries of your course content
+- 🧠 **Flashcards** — AI-generated active recall cards from your notes
+- ❓ **Practice Questions** — Quiz yourself before exams
+- 🆘 **Homework Help** — Get guided hints without just being given the answer
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| Auth | NextAuth.js (Google OAuth) |
+| Database | PostgreSQL (Supabase) |
+| AI | Anthropic / OpenAI API |
+| Deployment | Vercel |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 22+
+- pnpm
+- Supabase account
+- Google OAuth credentials
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/canvas-ai
+cd canvas-ai
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` file in the root directory:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-here
 
-## Learn More
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
 
-To learn more about Next.js, take a look at the following resources:
+DATABASE_URL=your-supabase-connection-string
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Database Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Run this in your Supabase SQL editor:
 
-## Deploy on Vercel
+```sql
+CREATE TABLE users (
+  email TEXT PRIMARY KEY,
+  canvas_url TEXT,
+  canvas_token TEXT
+);
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Run Locally
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000)
+
+## How To Get Your Canvas API Token
+
+1. Log in to your university Canvas account
+2. Go to **Account → Settings**
+3. Scroll to **Approved Integrations**
+4. Click **New Access Token**
+5. Copy the token and paste it in Canvas AI settings
+
+## Project Structure
+
+```
+├── app/
+│   ├── page.tsx               # Landing page
+│   ├── auth/                  # Login page
+│   ├── dashboard/             # Protected pages
+│   │   ├── page.tsx           # Course dashboard
+│   │   ├── courses/[id]/      # Individual course
+│   │   └── settings/          # Canvas token settings
+│   └── api/                   # Backend API routes
+├── components/
+│   ├── layout/                # Navbar, sidebar
+│   ├── dashboard/             # Course cards
+│   └── settings/              # Settings form
+└── lib/
+    ├── db.ts                  # Database connection
+    ├── canvas.ts              # Canvas API helpers
+    └── actions.ts             # Server actions
+```
+
+## Status
+
+🚧 **In Progress** — Core auth and dashboard complete. Canvas API integration and AI features coming soon.
+
+## License
+
+MIT
