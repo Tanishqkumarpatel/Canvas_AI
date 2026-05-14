@@ -1,12 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { signOut, useSession } from "next-auth/react"
+import { signOut } from "next-auth/react"
 import Link from 'next/link'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const { data } = useSession()
 
   return (
     <>
@@ -25,7 +24,7 @@ export default function Navbar() {
             ☰
         </button>
         <h1 className='m-auto font-bold text-xl text-white'>Canvas AI</h1>
-    </header>
+      </header>
 
       {isOpen && (
         <div

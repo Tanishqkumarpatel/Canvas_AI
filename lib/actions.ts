@@ -27,3 +27,26 @@ export async function saveSettings(formData: FormData) {
     }
     redirect('/dashboard')
 }
+
+
+export async function checkCanvasAccess() {
+
+    try {
+        const session = await getServerSession()
+
+        if (!session)
+            throw new Error("Session is null or undefined!")
+
+        if (!session.user || !session.user.email) {
+            throw new Error("User undefined or email does not exist!")
+        }
+
+        const data = await sql`SELECT canvas_token, canvas_url FROM users WHERE email=${session.user.email}`
+        
+        return data[0].canvas_token !== null && data[0].canvas_url !== null
+        
+    } catch (error) {
+        console.error(error)
+        return false
+    }
+}

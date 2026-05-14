@@ -4,41 +4,15 @@
     "name": "Introduction to Computer Science",
     "course_code": "CS101",
     "term": "Spring 2026",
-    "enrollment_status": "active"
+    "enrollment_status": "active",
+    "materials_path": "mock_course_materials/mit6-100l-f22"
   },
   {
     "id": "2",
-    "name": "Calculus II",
-    "course_code": "MATH200",
+    "name": "Theory of Computation",
+    "course_code": "CS404",
     "term": "Spring 2026",
-    "enrollment_status": "active"
-  },
-  {
-    "id": "3",
-    "name": "Academic Writing",
-    "course_code": "ENGL100",
-    "term": "Spring 2026",
-    "enrollment_status": "active"
-  },
-  {
-    "id": "4",
-    "name": "Introduction to Psychology",
-    "course_code": "PSYC101",
-    "term": "Spring 2026",
-    "enrollment_status": "active"
-  },
-  {
-    "id": "5",
-    "name": "Data Structures and Algorithms",
-    "course_code": "CS201",
-    "term": "Spring 2026",
-    "enrollment_status": "active"
-  },
-  {
-    "id": "6",
-    "name": "Linear Algebra",
-    "course_code": "MATH221",
-    "term": "Fall 2025",
-    "enrollment_status": "completed"
+    "enrollment_status": "active",
+    "materials_path": "mock_course_materials/mit18-404j-f20"
   }
 ]
