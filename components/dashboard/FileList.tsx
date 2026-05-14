@@ -1,20 +1,20 @@
 'use client'
 
-
-export default function FileList( { file, url } : {
-    file: string,
+export default function FileList( { name, url } : {
+    name: string,
     url: string
 }
 ) 
 {
-    
     return (
-        <button className="border p-4" onClick={() => {
-            const fullUrl = `https://wjrlicdlrcxziscsxqau.supabase.co/storage/v1/object/public/mock/${url}/${file}`
-            window.open(fullUrl)
-        }} >  
-            {file}
+        <button 
+            className="text-left text-sm truncate hover:text-blue-600 transition-colors w-full"
+            onClick={() => {
+                const fullUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/mock/${url}`
+                window.open(fullUrl)
+            }} 
+        >  
+            {name}
         </button>
     )
 }
-

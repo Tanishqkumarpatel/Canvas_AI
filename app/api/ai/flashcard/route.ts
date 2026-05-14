@@ -1,40 +1,50 @@
 import { GoogleGenAI } from "@google/genai"
-import { readFileAsBase64 } from "@/lib/files"
+import { fetchFileAsBase64 } from "@/lib/files"
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+type fileType = {
+    name: string,
+    folder: string,
+    url: string
+}
 
-const testFiles = ['test_flashcard.pdf']
+export async function POST(request: Request) {
+  try {
+    const { files } = await request.json()
+    const fileParts = await Promise.all(
+      files.map(async (file: fileType) => ({
+        inlineData: await fetchFileAsBase64(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/mock/${file.url}`)
+      })))
 
-export async function GET() {
-  const fileParts = testFiles.map(file => ({
-      inlineData: readFileAsBase64(file)
-    }))
-  
-  const response = await ai.models.generateContent({
-    model: "gemini-3.1-flash-lite",
-    contents: [
-      {
-        role: "user",
-        parts: [
-          ...fileParts
-        ]
-      }
-    ], // user input.
-    config: {
-      systemInstruction: "Make flash cards, from the sources provided. Flashcard should have a question and answer pair.",
-      responseMimeType: "application/json", 
-      responseJsonSchema:  {
-        type: "array",
-        items: {
-          type: "object",
-          properties: {
-            question: { type: "string" },
-            answer: { type: "string" }
+      const response = await ai.models.generateContent({
+      model: "gemini-3.1-flash-lite",
+      contents: [
+        {
+          role: "user",
+          parts: [
+            ...fileParts
+          ]
+        }
+      ], // user input.
+      config: {
+        systemInstruction: "Make flash cards, from the sources provided. Flashcard should have a question and answer pair.",
+        responseMimeType: "application/json", 
+        responseJsonSchema:  {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              question: { type: "string" },
+              answer: { type: "string" }
+            }
           }
         }
-      }
 
-    }
-  });
-  if(!response.text) return
-  return Response.json(JSON.parse(response.text))
+      }
+    });
+    if(!response.text) return Response.json({ error: 'No response' }, { status: 500 })
+    return Response.json(JSON.parse(response.text))
+  } catch (error) {
+    console.error(error)
+    return Response.json({ error: String(error) }, { status: 500 })
+  }
 }

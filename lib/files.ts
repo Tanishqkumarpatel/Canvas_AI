@@ -1,8 +1,5 @@
-import * as fs from 'fs'
-import * as path from 'path'
-
-export function getMimeType(filename: string) {
-  const ext = filename.split('.').pop()?.toLowerCase()
+export function getMimeType(url: string) {
+  const ext = url.split('.').pop()?.toLowerCase()
   switch(ext) {
     case 'pdf':  return 'application/pdf'
     case 'ppt':
@@ -13,10 +10,12 @@ export function getMimeType(filename: string) {
   }
 }
 
-export function readFileAsBase64(filename: string) {
-  const buffer = fs.readFileSync(path.join(process.cwd(), filename))
-  return {
-    mimeType: getMimeType(filename),
-    data: buffer.toString('base64')
-  }
+export async function fetchFileAsBase64(url: string) {
+  const res = await fetch(url)
+    const buffer = await res.arrayBuffer()
+    const base64 = Buffer.from(buffer).toString('base64')
+    return {
+      mimeType: getMimeType(url),
+      data: base64
+    }
 }
