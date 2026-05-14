@@ -20,7 +20,7 @@ Canvas AI pulls your courses directly from Canvas and turns your lecture materia
 | Styling | Tailwind CSS |
 | Auth | NextAuth.js (Google OAuth) |
 | Database | PostgreSQL (Supabase) |
-| AI | Anthropic / OpenAI API |
+| AI | Gemini/Google AI Studio |
 | Deployment | Vercel |
 
 ## Getting Started
