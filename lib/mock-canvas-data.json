@@ -4,15 +4,14 @@
     "name": "Introduction to Computer Science",
     "course_code": "CS101",
     "term": "Spring 2026",
-    "enrollment_status": "active",
-    "materials_path": "mock_course_materials/mit6-100l-f22"
+    "enrollment_status": "active"
   },
   {
     "id": "2",
     "name": "Theory of Computation",
     "course_code": "CS404",
     "term": "Spring 2026",
-    "enrollment_status": "active",
-    "materials_path": "mock_course_materials/mit18-404j-f20"
+    "enrollment_status": "active"
   }
 ]
+

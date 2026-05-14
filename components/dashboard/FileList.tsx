@@ -9,10 +9,10 @@ export default function FileList( { file, url } : {
 {
     
     return (
-        <button className="border p-4" onClick={()=>{
-            console.log(`/api/files/${url}/${file}`)
-            window.open(`/api/files/${url}/${file}`)
-            }} >  
+        <button className="border p-4" onClick={() => {
+            const fullUrl = `https://wjrlicdlrcxziscsxqau.supabase.co/storage/v1/object/public/mock/${url}/${file}`
+            window.open(fullUrl)
+        }} >  
             {file}
         </button>
     )
