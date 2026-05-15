@@ -1,6 +1,6 @@
+// components/dashboard/CourseSideBar.tsx
 'use client'
 import { useState } from "react"
-import React from "react"
 import FileList from "./FileList"
 
 type filesType = { name: string, folder: string, url: string }[]
@@ -25,8 +25,8 @@ export default function CourseSideBar({ files, selectedFiles, onFileSelect }: {
     const isSelected = (file: filesType[0]) => selectedFiles.some(f => f.url === file.url)
 
     const FileItem = ({ file }: { file: filesType[0] }) => (
-        <div className={`flex items-center gap-2 px-3 py-1.5 mx-2 rounded-lg cursor-pointer text-sm transition-all
-            ${isSelected(file) ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100'}`}
+        <div className={`group flex items-center gap-3 px-4 py-2 mx-2 rounded-lg cursor-pointer text-sm transition-all duration-200
+            ${isSelected(file) ? 'bg-blue-600 text-white shadow-md' : 'text-slate-600 hover:bg-blue-50 hover:text-blue-700'}`}
         >
             <input
                 type="checkbox"
@@ -38,62 +38,49 @@ export default function CourseSideBar({ files, selectedFiles, onFileSelect }: {
                         onFileSelect([...selectedFiles, file])
                     }
                 }}
-                className="accent-blue-600 shrink-0"
+                className={`w-4 h-4 rounded border-gray-300 transition-all ${isSelected(file) ? 'accent-white' : 'accent-blue-600'}`}
             />
-            <FileList name={file.name} url={file.url} />
+            <span className="flex-1 truncate"><FileList name={file.name} url={file.url} /></span>
         </div>
     )
 
     return (
-        <div className="flex flex-col h-full">
-
-            {/* Sidebar Header */}
-            <div className="px-4 py-4 border-b border-gray-100">
-                <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest">Course Materials</p>
-                {selectedFiles.length > 0 && (
-                    <div className="mt-2 flex items-center justify-between">
-                        <p className="text-xs text-gray-400">{selectedFiles.length} selected</p>
+        <div className="flex flex-col h-full bg-white">
+            <div className="px-6 py-6 border-b border-slate-100">
+                <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Library</h2>
+                <div className="mt-1 flex items-center justify-between">
+                    <p className="text-xs text-slate-400 font-medium">{selectedFiles.length} files active</p>
+                    {selectedFiles.length > 0 && (
                         <button
-                            className="text-xs text-blue-500 hover:text-blue-700"
+                            className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors"
                             onClick={() => onFileSelect([])}
                         >
-                            Clear all
+                            Clear Selection
                         </button>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
 
-            {/* File Tree */}
-            <div className="flex-1 overflow-y-auto py-3">
-
-                {/* Root files */}
-                {grouped['root'] && (
-                    <div className="mb-2">
-                        {grouped['root'].map(file => <FileItem key={file.name} file={file} />)}
-                    </div>
-                )}
-
+            <div className="flex-1 overflow-y-auto py-4">
                 {/* Folders */}
-                {Object.entries(grouped)
-                    .filter(([name]) => name !== 'root')
-                    .map(([folderName, folderFiles]) => (
-                        <div key={folderName} className="mb-1">
-                            <button
-                                className="flex items-center gap-2 w-full px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-widest hover:text-gray-600 transition-colors"
-                                onClick={() => setOpenFolders({ ...openFolders, [folderName]: !openFolders[folderName] })}
-                            >
-                                <span>{openFolders[folderName] ? '▾' : '▸'}</span>
-                                {folderName}
-                                <span className="ml-auto font-normal normal-case">{folderFiles.length}</span>
-                            </button>
+                {Object.entries(grouped).map(([folderName, folderFiles]) => (
+                    <div key={folderName} className="mb-4">
+                        <button
+                            className="flex items-center gap-2 w-full px-6 py-1 text-xs font-bold text-slate-400 uppercase tracking-tighter hover:text-blue-600 transition-colors"
+                            onClick={() => setOpenFolders({ ...openFolders, [folderName]: !openFolders[folderName] })}
+                        >
+                            <span className="text-[10px] opacity-70">{openFolders[folderName] ? '▼' : '▶'}</span>
+                            {folderName === 'root' ? 'General' : folderName}
+                            <span className="ml-auto bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full text-[10px]">{folderFiles.length}</span>
+                        </button>
 
-                            {openFolders[folderName] && (
-                                <div className="flex flex-col gap-0.5">
-                                    {folderFiles.map(file => <FileItem key={file.name} file={file} />)}
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                        {openFolders[folderName] && (
+                            <div className="mt-1 space-y-0.5">
+                                {folderFiles.map(file => <FileItem key={file.url} file={file} />)}
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
         </div>
     )
