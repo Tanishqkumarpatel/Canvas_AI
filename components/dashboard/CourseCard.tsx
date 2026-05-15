@@ -14,8 +14,6 @@ export function CourseCard({ course }: {
   return (
     <Link href={`/dashboard/courses/${course.id}`}>
       <div className="group relative flex flex-col h-full bg-white rounded-3xl border border-slate-100 p-6 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden">
-        
-        {/* Subtle background accent that appears on hover */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-16 -mt-16 transition-transform duration-500 group-hover:scale-150 group-hover:bg-blue-100/50" />
 
         <div className="relative z-10 flex justify-between items-start mb-4">
@@ -51,7 +49,7 @@ export function CourseCard({ course }: {
             {course.term}
           </p>
           <span className="text-[10px] font-bold text-blue-600/40 group-hover:text-blue-600 transition-colors uppercase tracking-widest">
-            View Lab
+            View Course
           </span>
         </div>
       </div>

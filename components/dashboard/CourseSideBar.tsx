@@ -1,4 +1,3 @@
-// components/dashboard/CourseSideBar.tsx
 'use client'
 import { useState } from "react"
 import FileList from "./FileList"

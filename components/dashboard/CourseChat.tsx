@@ -69,7 +69,6 @@ function QuizView({ questions }: { questions: QuizQuestion[] }) {
 
     return (
         <div className="flex flex-col gap-6 max-w-3xl mx-auto w-full pb-20">
-            {/* Simple Info Banner */}
             <div className="rounded-3xl bg-white border border-blue-100 p-6 flex items-center justify-between shadow-sm">
                 <div>
                     <h3 className="text-slate-900 font-bold text-lg">Practice Quiz</h3>
@@ -166,7 +165,6 @@ function QuizView({ questions }: { questions: QuizQuestion[] }) {
     )
 }
 
-// --- MAIN COMPONENT: COURSE CHAT ---
 export default function CourseChat({ selectedFiles, courseName }: { selectedFiles: filesType, courseName: string }) {
     const [activeTool, setActiveTool] = useState('')
     const [output, setOutput] = useState<unknown>(null)
