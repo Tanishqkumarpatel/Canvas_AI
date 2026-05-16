@@ -1,179 +1,52 @@
 'use client'
 import { useState } from "react"
 import ReactMarkdown from 'react-markdown'
+import FlashCard from "./FlashCard"
+import Quiz from "./Quiz"
+import { ChatOut, ChatIn } from "./Chat"
 
-type filesType = { name: string, folder: string, url: string }[]
-type Flashcard = { question: string, answer: string }
+type filesType = { 
+    name: string, 
+    folder: string, 
+    url: string 
+}[]
+
+type Flashcard = { 
+    question: string, 
+    answer: string 
+}
+
 type QuizQuestion = {
-    id: string, type: string, question: string,
-    options?: string[], pairs?: { left: string, right: string }[],
-    answer: string, explanation: string
+    id: string, 
+    type: string, 
+    question: string,
+    options?: string[], 
+    pairs?: { 
+        left: string, 
+        right: string 
+    }[],
+    answer: string, 
+    explanation: string
 }
 
-function FlashcardView({ cards }: { cards: Flashcard[] }) {
-    const [index, setIndex] = useState(0)
-    const [flipped, setFlipped] = useState(false)
-
-    return (
-        <div className="flex flex-col items-center justify-center h-full gap-8 px-4 py-12">
-            <div className="flex items-center gap-2 mb-4">
-                {cards.map((_, i) => (
-                    <div 
-                        key={i} 
-                        className={`h-1.5 rounded-full transition-all duration-300 ${i === index ? 'w-8 bg-blue-600' : 'w-2 bg-slate-200'}`} 
-                    />
-                ))}
-            </div>
-
-            <div
-                className="w-full max-w-xl min-h-[320px] relative transition-all duration-500 preserve-3d cursor-pointer group"
-                onClick={() => setFlipped(!flipped)}
-            >
-                <div className={`absolute inset-0 bg-white rounded-3xl shadow-xl border border-slate-100 flex flex-col items-center justify-center p-12 text-center transition-all duration-500 backface-hidden ${flipped ? 'rotate-y-180 opacity-0' : 'rotate-y-0 opacity-100'}`}>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-blue-500 mb-6 bg-blue-50 px-3 py-1 rounded-full">Question {index + 1}</span>
-                    <p className="text-slate-800 text-xl font-medium leading-relaxed">{cards[index].question}</p>
-                    <p className="text-slate-400 text-xs mt-8 group-hover:text-blue-400 transition-colors">Click card to reveal answer</p>
-                </div>
-                
-                <div className={`absolute inset-0 bg-slate-900 rounded-3xl shadow-xl flex flex-col items-center justify-center p-12 text-center transition-all duration-500 backface-hidden ${flipped ? 'rotate-y-0 opacity-100' : 'rotate-y-180 opacity-0'}`}>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-6 bg-emerald-400/10 px-3 py-1 rounded-full">The Answer</span>
-                    <p className="text-white text-xl font-medium leading-relaxed">{cards[index].answer}</p>
-                    <p className="text-slate-400 text-xs mt-8">Click to return to question</p>
-                </div>
-            </div>
-
-            <div className="flex items-center gap-6 mt-4">
-                <button
-                    className="p-3 rounded-full border border-slate-200 text-slate-500 hover:bg-white hover:text-blue-600 hover:border-blue-200 disabled:opacity-30 transition-all shadow-sm"
-                    onClick={() => { setIndex(index - 1); setFlipped(false) }}
-                    disabled={index === 0}
-                >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                </button>
-                <span className="text-sm font-bold text-slate-500 bg-slate-100 px-4 py-1 rounded-full">{index + 1} of {cards.length}</span>
-                <button
-                    className="p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-30 transition-all shadow-lg shadow-blue-100"
-                    onClick={() => { setIndex(index + 1); setFlipped(false) }}
-                    disabled={index === cards.length - 1}
-                >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                </button>
-            </div>
-        </div>
-    )
-}
-
-function QuizView({ questions }: { questions: QuizQuestion[] }) {
-    const [answers, setAnswers] = useState<Record<string, string>>({})
-    const [showAnswers, setShowAnswers] = useState(false)
-
-    return (
-        <div className="flex flex-col gap-6 max-w-3xl mx-auto w-full pb-20">
-            <div className="rounded-3xl bg-white border border-blue-100 p-6 flex items-center justify-between shadow-sm">
-                <div>
-                    <h3 className="text-slate-900 font-bold text-lg">Practice Quiz</h3>
-                    <p className="text-slate-500 text-xs">Test your knowledge. Reveal answers when you are ready to review.</p>
-                </div>
-                <button
-                    onClick={() => setShowAnswers(!showAnswers)}
-                    className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${showAnswers ? 'bg-slate-100 text-slate-600' : 'bg-blue-600 text-white shadow-lg shadow-blue-100'}`}
-                >
-                    {showAnswers ? 'Hide Answers' : 'Show All Answers'}
-                </button>
-            </div>
-
-            {questions.map((q, i) => (
-                <div key={q.id} className="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm flex flex-col gap-5">
-                    <div className="flex items-center gap-3">
-                        <span className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 text-sm flex items-center justify-center font-bold">{i + 1}</span>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-2 py-1 rounded-md">{q.type.replace('_', ' ')}</span>
-                    </div>
-                    
-                    <p className="text-slate-800 font-semibold text-lg leading-snug">{q.question}</p>
-
-                    {q.type === 'multiple_choice' && q.options && (
-                        <div className="grid grid-cols-1 gap-3 mt-2">
-                            {q.options.map(opt => {
-                                const isCorrect = opt.toLowerCase() === q.answer.toLowerCase()
-                                const isSelected = answers[q.id] === opt
-                                
-                                return (
-                                    <label key={opt} className={`flex items-center gap-4 px-5 py-4 rounded-2xl border-2 cursor-pointer transition-all
-                                        ${showAnswers && isCorrect 
-                                            ? 'bg-emerald-50 border-emerald-500 text-emerald-700' 
-                                            : isSelected 
-                                                ? 'bg-blue-50 border-blue-600 text-blue-700 ring-4 ring-blue-50' 
-                                                : 'border-slate-100 hover:border-blue-100 hover:bg-slate-50'}`}
-                                    >
-                                        <input type="radio" name={q.id} value={opt} 
-                                            onChange={() => !showAnswers && setAnswers({ ...answers, [q.id]: opt })}
-                                            className="w-4 h-4 accent-blue-600" />
-                                        <span className="text-sm font-medium">{opt}</span>
-                                        {showAnswers && isCorrect && <span className="ml-auto text-emerald-600 text-xs font-bold">Correct Answer</span>}
-                                    </label>
-                                )
-                            })}
-                        </div>
-                    )}
-
-                    {q.type === 'true_false' && (
-                        <div className="flex gap-4 mt-2">
-                            {['true', 'false'].map(opt => {
-                                const isCorrect = opt === q.answer.toLowerCase()
-                                const isSelected = answers[q.id] === opt
-
-                                return (
-                                    <label key={opt} className={`flex items-center justify-center gap-3 flex-1 py-4 rounded-2xl border-2 cursor-pointer transition-all
-                                        ${showAnswers && isCorrect 
-                                            ? 'bg-emerald-50 border-emerald-500 text-emerald-700' 
-                                            : isSelected 
-                                                ? 'bg-blue-50 border-blue-600 text-blue-700 ring-4 ring-blue-50' 
-                                                : 'border-slate-100 hover:border-blue-100 hover:bg-slate-50'}`}
-                                    >
-                                        <input type="radio" name={q.id} value={opt}
-                                            onChange={() => !showAnswers && setAnswers({ ...answers, [q.id]: opt })}
-                                            className="w-4 h-4 accent-blue-600" />
-                                        <span className="text-sm font-bold capitalize">{opt}</span>
-                                    </label>
-                                )
-                            })}
-                        </div>
-                    )}
-
-                    {(q.type === 'short_answer' || q.type === 'problem_solving') && (
-                        <textarea
-                            className="border-2 border-slate-100 bg-slate-50 rounded-2xl p-5 text-sm w-full resize-none focus:outline-none focus:border-blue-400 focus:bg-white transition-all min-h-[120px]"
-                            placeholder="Draft your answer..."
-                            onChange={e => setAnswers({ ...answers, [q.id]: e.target.value })}
-                        />
-                    )}
-
-                    {showAnswers && (
-                        <div className="bg-slate-50 rounded-2xl p-6 border-l-4 border-blue-500 mt-2">
-                            <p className="font-bold text-blue-700 mb-2 flex items-center gap-2 text-sm uppercase tracking-wider">
-                                Explanation
-                            </p>
-                            <p className="text-slate-600 leading-relaxed italic text-sm">&quot;{q.explanation}&quot;</p>
-                            {(q.type === 'short_answer' || q.type === 'problem_solving') && (
-                                <p className="mt-3 text-slate-800 text-sm font-bold">Suggested Answer: <span className="font-normal">{q.answer}</span></p>
-                            )}
-                        </div>
-                    )}
-                </div>
-            ))}
-        </div>
-    )
+type Message = { 
+    role: 'user' |'model',
+    content: string
 }
 
 export default function CourseChat({ selectedFiles, courseName }: { selectedFiles: filesType, courseName: string }) {
     const [activeTool, setActiveTool] = useState('')
     const [output, setOutput] = useState<unknown>(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [messages, setMessages] = useState<Message[]>([])
+    const [userInput, setUserInput] = useState('')
 
     const callApi = async (tool: string, endpoint: string) => {
+        setMessages([])
         setActiveTool(tool)
         setIsLoading(true)
         setOutput(null)
+        if (tool === 'Chat') return
         try {
             const res = await fetch(endpoint, {
                 method: 'POST',
@@ -188,10 +61,34 @@ export default function CourseChat({ selectedFiles, courseName }: { selectedFile
         setIsLoading(false)
     }
 
+    const sendMessage = async ()=> {
+        if (!userInput.trim()) return
+
+        const newMessage:Message = { role:'user', content:userInput }
+        const updatedMessages = [...messages, newMessage]
+        setMessages(updatedMessages)
+        setUserInput('')
+        setIsLoading(true)
+
+        const res = await fetch('/api/ai/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                files: selectedFiles,
+                messages: updatedMessages,
+                userMessage: userInput
+             })
+        })
+        const data = await res.json()
+        setMessages([...updatedMessages, { role:'model', content: data.message }])
+        setIsLoading(false)
+    }
+
     const tools = [
         { label: 'Flashcards', tool: 'Flashcard', endpoint: '/api/ai/flashcard', icon: '🃏' },
         { label: 'Practice Quiz', tool: 'Quiz', endpoint: '/api/ai/quiz', icon: '📝' },
         { label: 'Deep Summary', tool: 'Summary', endpoint: '/api/ai/summary', icon: '📄' },
+        { label: 'Ask AI', tool: 'Chat', endpoint: '/api/ai/chat', icon: '💬' }
     ]
 
     return (
@@ -227,7 +124,7 @@ export default function CourseChat({ selectedFiles, courseName }: { selectedFile
             )}
 
             <div className="flex-1 overflow-y-auto custom-scrollbar">
-                {!selectedFiles.length ? (
+                {!selectedFiles.length && activeTool !== "Chat" ? (
                     <div className="h-full flex flex-col items-center justify-center p-12 text-center">
                         <div className="w-24 h-24 rounded-[2.5rem] bg-white shadow-2xl flex items-center justify-center text-4xl mb-8 border border-slate-50 rotate-3">📂</div>
                         <h2 className="text-2xl font-black text-slate-900 mb-2">Build your study context</h2>
@@ -250,13 +147,17 @@ export default function CourseChat({ selectedFiles, courseName }: { selectedFile
                             ))}
                         </div>
                     </div>
-                ) : isLoading ? (
+                ) : isLoading && activeTool!== 'Chat' ? (
                     <div className="h-full flex flex-col items-center justify-center gap-4">
                         <div className="relative">
                             <div className="w-16 h-16 border-4 border-blue-100 rounded-full" />
                             <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin absolute top-0" />
                         </div>
                         <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Processing Context...</p>
+                    </div>
+                ) : activeTool === 'Chat' ? (
+                    <div className="p-8">
+                        {<ChatOut messages={messages} isLoading={isLoading} />}
                     </div>
                 ) : output ? (
                     <div className="p-8">
@@ -269,11 +170,12 @@ export default function CourseChat({ selectedFiles, courseName }: { selectedFile
                                 <ReactMarkdown>{output as string}</ReactMarkdown>
                             </div>
                         )}
-                        {activeTool === 'Flashcard' && <FlashcardView cards={output as Flashcard[]} />}
-                        {activeTool === 'Quiz' && <QuizView questions={output as QuizQuestion[]} />}
+                        {activeTool === 'Flashcard' && <FlashCard cards={output as Flashcard[]} />}
+                        {activeTool === 'Quiz' && <Quiz questions={output as QuizQuestion[]} />}
                     </div>
                 ) : null}
             </div>
+            {activeTool === 'Chat' && (<ChatIn userInput={userInput} setUserInput={setUserInput} sendMessage={sendMessage} isLoading={isLoading} />)}
         </div>
     )
 }

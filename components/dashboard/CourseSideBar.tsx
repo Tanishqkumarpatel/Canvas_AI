@@ -2,10 +2,15 @@
 import { useState } from "react"
 import FileList from "./FileList"
 
-type filesType = { name: string, folder: string, url: string }[]
+type filesType = { 
+    name: string, 
+    folder: string, 
+    url: string 
+}[]
 
 export default function CourseSideBar({ files, selectedFiles, onFileSelect }: {
-    files: filesType, selectedFiles: filesType,
+    files: filesType, 
+    selectedFiles: filesType,
     onFileSelect: React.Dispatch<React.SetStateAction<filesType>>
 }) {
     const grouped = files.reduce((acc, file) => {
@@ -61,7 +66,6 @@ export default function CourseSideBar({ files, selectedFiles, onFileSelect }: {
             </div>
 
             <div className="flex-1 overflow-y-auto py-4">
-                {/* Folders */}
                 {Object.entries(grouped).map(([folderName, folderFiles]) => (
                     <div key={folderName} className="mb-4">
                         <button

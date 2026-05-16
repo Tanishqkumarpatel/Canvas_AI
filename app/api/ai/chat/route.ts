@@ -9,9 +9,15 @@ type fileType = {
   url: string
 }
 
+type Message = {
+  role: 'user' | 'model',
+  content: string
+}
+
 export async function POST(request: Request) {
   try {
-    const { files } = await request.json()
+    const { files, messages=[], userMessage } = await request.json()
+
     const fileParts = await Promise.all(
       files.map(async (file: fileType) => ({
         inlineData: await fetchFileAsBase64(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/mock/${file.url}`)
@@ -24,22 +30,33 @@ export async function POST(request: Request) {
         {
           role: "user",
           parts: [
-            ...fileParts
+            ...fileParts,
+            { text: messages.length>0 ? messages[0].content : userMessage } 
           ]
-        }
+        },
+        ...messages.slice(1).map((msg:Message)=>({
+          role: msg.role,
+          parts: [{ text:msg.content }]
+        })),
+        ...(messages.length > 0 ? [{
+          role: 'user',
+          parts: [{ text: userMessage }]
+        }]:[])
       ],
       config: {
-        systemInstruction: `You are a pedagogical homework helper. Your goal is to help students 
-        understand concepts, not just give them answers. 
-        
-        When a student asks a question:
-        - Guide them with hints and leading questions
-        - Break down complex problems into smaller steps  
-        - Ask them what they already know about the topic
-        - Praise correct reasoning and gently correct mistakes
-        - Never give the final answer directly unless the student has genuinely tried
-        
-        Use the provided course materials as your only source of truth.`
+        systemInstruction: `You are a helpful study assistant with access to the student's course materials.
+
+        Your role is to answer questions about the provided documents accurately and helpfully.
+
+        Guidelines:
+        - Answer questions directly and clearly based on the provided materials
+        - Quote or reference specific parts of the materials when relevant
+        - If something is not covered in the materials, say so clearly
+        - Keep answers concise but thorough
+        - Use simple language appropriate for a university student
+        - If asked to explain a concept, use examples from the materials where possible
+
+        Only use the provided course materials as your source of truth. Do not use outside knowledge.`
       }
     })
 
