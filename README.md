@@ -9,7 +9,7 @@ Canvas AI pulls your courses directly from Canvas and turns your lecture materia
 - 📝 **Lecture Summaries** — Get concise summaries of your course content
 - 🧠 **Flashcards** — AI-generated active recall cards from your notes
 - ❓ **Practice Questions** — Quiz yourself before exams
-- 🆘 **Homework Help** — Get guided hints without just being given the answer
+- 🆘 **Homework Help** — Get guided hints without just being given the answer [In progress]
 
 ## Tech Stack
 
@@ -96,16 +96,19 @@ Open [http://localhost:3000](http://localhost:3000)
 ├── components/
 │   ├── layout/                # Navbar, sidebar
 │   ├── dashboard/             # Course cards
-│   └── settings/              # Settings form
+│   └── forms/                 # Settings form
 └── lib/
     ├── db.ts                  # Database connection
-    ├── canvas.ts              # Canvas API helpers
+    ├── files.ts               # Reading file, for backend
+    ├── listAllFiles.ts        # listing mock courses for demo
+    ├── Supabase.ts            # supabase connection for bucket
     └── actions.ts             # Server actions
+
 ```
 
 ## Status
 
-🚧 **In Progress** — Core auth and dashboard complete. Canvas API integration and AI features coming soon.
+🚧 **In Progress** — Core auth and dashboard complete. Canvas API integration and Homework AI feature coming soon.
 
 ## License
 
