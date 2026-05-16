@@ -40,13 +40,14 @@ export default function CourseChat({ selectedFiles, courseName }: { selectedFile
     const [isLoading, setIsLoading] = useState(false)
     const [messages, setMessages] = useState<Message[]>([])
     const [userInput, setUserInput] = useState('')
+    const [savedContext, setSavedContext] = useState<filesType>([])
 
     const callApi = async (tool: string, endpoint: string) => {
         setMessages([])
         setActiveTool(tool)
+        if (tool === 'Chat') return
         setIsLoading(true)
         setOutput(null)
-        if (tool === 'Chat') return
         try {
             const res = await fetch(endpoint, {
                 method: 'POST',
@@ -63,6 +64,11 @@ export default function CourseChat({ selectedFiles, courseName }: { selectedFile
 
     const sendMessage = async ()=> {
         if (!userInput.trim()) return
+        const context = selectedFiles.filter(
+            file=>!savedContext.some(saved => saved.url === file.url)
+        )
+        
+        setSavedContext([...savedContext, ...context])
 
         const newMessage:Message = { role:'user', content:userInput }
         const updatedMessages = [...messages, newMessage]
@@ -70,17 +76,21 @@ export default function CourseChat({ selectedFiles, courseName }: { selectedFile
         setUserInput('')
         setIsLoading(true)
 
-        const res = await fetch('/api/ai/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                files: selectedFiles,
-                messages: updatedMessages,
-                userMessage: userInput
-             })
-        })
-        const data = await res.json()
-        setMessages([...updatedMessages, { role:'model', content: data.message }])
+        try {
+            const res = await fetch('/api/ai/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    files: context,
+                    messages: updatedMessages,
+                    userMessage: userInput
+                })
+            })
+            const data = await res.json()
+            setMessages([...updatedMessages, { role:'model', content: data.message }])
+        } catch (error) {
+            console.error(error)
+        } 
         setIsLoading(false)
     }
 
@@ -99,8 +109,11 @@ export default function CourseChat({ selectedFiles, courseName }: { selectedFile
                     <div className="flex items-center gap-2 mt-1">
                         <span className={`w-2 h-2 rounded-full ${selectedFiles.length > 0 ? 'bg-blue-500 animate-pulse' : 'bg-slate-300'}`} />
                         <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">
-                            {selectedFiles.length > 0 ? `${selectedFiles.length} Selected Files` : 'No context provided'}
+                            {selectedFiles.length > 0 ? `${selectedFiles.length} Selected Files` : 'No Files provided'}
                         </p>
+                        {activeTool==='Chat' && <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">
+                            {savedContext.length > 0 ? `${savedContext.length} Files in Context` : 'No Context Provided'}
+                        </p>}
                     </div>
                 </div>
             </header>
