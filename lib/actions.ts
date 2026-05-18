@@ -18,14 +18,19 @@ export async function saveSettings(formData: FormData) {
         if (!session.user || !session.user.email) {
             throw new Error("User undefined or email does not exist!")
         }
+
+        if (session?.user?.email === 'demo@canvasai.com') {
+            return { error: 'Demo users cannot update settings' }
+        }
         
         await sql`UPDATE users SET canvas_url = ${url}, canvas_token = ${token} WHERE email=${session.user.email}`
         console.log("Saved url and token succesfully")
     } catch (error) {
         console.error(error)
-        return
+        return {error: "Something Went Wrong Please Try Again Later!"}
     }
     redirect('/dashboard')
+    return {success: "Settings Saved Succesfully!"}
 }
 
 

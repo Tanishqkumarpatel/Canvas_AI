@@ -1,15 +1,28 @@
 'use client'
 import { saveSettings } from "@/lib/actions"
+import { toast } from "sonner"
 
 // import { useState } from "react"
 export default function SettingsForm() {
     // const [canvasToken, setCanvasToken] = useState('')
     // const [canvasUrl, setCanvasUrl] = useState('')
+    const handleSubmit = async (formData: FormData) => {
+        const result = await saveSettings(formData)
+        if (!result) {
+            toast.error('Something Went Wrong!')
+            return 
+        }
+        if (result.error) {
+            toast.error(result.error)
+        } else {
+            toast.success(result.success)
+        }
+    }
 
     return ( 
     <div className="max-w-lg mx-auto mt-10 p-6">       
         <h1 className="text-2xl font-semibold mb-6">Settings</h1>
-        <form className="flex flex-col gap-6" action={saveSettings} >
+        <form className="flex flex-col gap-6" action={handleSubmit} >
 
             <div className="flex flex-col gap-2">
                 <label className="font-medium">Canvas URL</label>

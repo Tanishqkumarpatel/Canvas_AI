@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import FlashCard from "./FlashCard"
 import Quiz from "./Quiz"
 import { ChatOut, ChatIn } from "./Chat"
+import { toast } from "sonner"
 
 type filesType = { 
     name: string, 
@@ -58,6 +59,7 @@ export default function CourseChat({ selectedFiles, courseName }: { selectedFile
             setOutput(tool === 'Summary' ? data.summary : data)
         } catch (error) {
             console.error("AI Error:", error)
+            toast.error(String(error))
         }
         setIsLoading(false)
     }
@@ -90,6 +92,7 @@ export default function CourseChat({ selectedFiles, courseName }: { selectedFile
             setMessages([...updatedMessages, { role:'model', content: data.message }])
         } catch (error) {
             console.error(error)
+            toast.error(String(error))
         } 
         setIsLoading(false)
     }

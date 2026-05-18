@@ -1,7 +1,6 @@
 import { CourseCard } from "@/components/dashboard/CourseCard"
 import courses from '../../lib/mock-canvas-data.json'
 import { checkCanvasAccess } from '@/lib/actions'
- 
 export default async function Dashboard() {
     const hasCanvas = await checkCanvasAccess()
     if (hasCanvas) {
