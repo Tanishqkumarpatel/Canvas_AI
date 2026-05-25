@@ -15,7 +15,7 @@ Canvas AI pulls your courses directly from Canvas and turns your lecture materia
 
 | Layer | Technology |
 |---|---|
-| Framework | Next.js 15 (App Router) |
+| Framework | Next.js 16.2.4 (App Router) |
 | Language | TypeScript |
 | Styling | Tailwind CSS |
 | Auth | NextAuth.js (Google OAuth) |
