@@ -3,6 +3,7 @@
 import sql from "./db"
 import { getServerSession } from "next-auth"
 import { redirect } from 'next/navigation'
+import { encryptToken } from "./secure"
 
 export async function saveSettings(formData: FormData) {
 
@@ -22,8 +23,8 @@ export async function saveSettings(formData: FormData) {
         if (session?.user?.email === 'demo@canvasai.com') {
             return { error: 'Demo users cannot update settings' }
         }
-        
-        await sql`UPDATE users SET canvas_url = ${url}, canvas_token = ${token} WHERE email=${session.user.email}`
+        const encryptrdToken = encryptToken(token)
+        await sql`UPDATE users SET canvas_url = ${url}, canvas_token = ${encryptrdToken} WHERE email=${session.user.email}`
         console.log("Saved url and token succesfully")
     } catch (error) {
         console.error(error)
