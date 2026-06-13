@@ -9,7 +9,7 @@ Canvas AI pulls your courses directly from Canvas and turns your lecture materia
 - 📝 **Lecture Summaries** — Get concise summaries of your course content
 - 🧠 **Flashcards** — AI-generated active recall cards from your notes
 - ❓ **Practice Questions** — Quiz yourself before exams
-- 🆘 **Homework Help** — Get guided hints without just being given the answer [In progress]
+- 🆘 **Chat** — Chat with Gemini about the course materials.
 
 ## Tech Stack
 
