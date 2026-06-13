@@ -108,7 +108,7 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ## Status
 
-🚧 **In Progress** — Core auth and dashboard complete. Canvas API integration and Homework AI feature coming soon.
+🚧 **In Progress** — Canvas API integration feature coming soon.
 
 ## License
 
